@@ -1,61 +1,86 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define C 0
+
 struct Point{
     int x,y;
 };
 int main()
 {
-    ofstream mfile("Points.txt");
+    ofstream mfile("input.txt");
+    //cout<<"enter the value of c\n";
+    int C;
+    //cout<<"enter the number of points\n";
+    cin>>C;
     int n;
     cin>>n;
+    //cout<<"enter points x1 y1\n";
     vector<Point> v(n+1);
     for(int i=1;i<=n;i++)
     {
         int x,y;
         cin>>x>>y;
-        mfile << x << "," << y ;
+        mfile << x << " " << y ;
         mfile << "\n";
         v[i]={x,y};
     }
     mfile.close();
-    vector<vector<int>> error( n+1 , vector<int> (n+1));
+    vector<vector<double>> error( n+1 , vector<double> (n+1,0));
+    vector<vector<double>> a( n+1 , vector<double> (n+1,0));
+    vector<vector<double>> b( n+1 , vector<double> (n+1,0));
     for(int i=1;i<=n;i++)
     {
-        for(int j=i;j<=n;j++)
+        for(int j=i+1;j<=n;j++)
         {
-            int sigxy=0, sigx=0,sigy=0,sigxsq=0;
-            for(int k=i;k<j;k++)
+            double sigxy=0, sigx=0,sigy=0,sigxsq=0;
+            for(int k=i;k<=j;k++)
             {
                 sigxy += v[k].x * v[k].y;
                 sigx += v[k].x;
                 sigy += v[k].y;
                 sigxsq += v[k].x * v[k].x ;
             }
-            int a,b,N ;
-            N = j-i;
-            a=(N*sigxy - sigx * sigy) /( N* sigxsq - sigx*sigx );
-            b=(sigy - a*sigx )/ N;
+            int N ;
+            N = j-i +1;
+            a[i][j]=(N*sigxy - sigx * sigy) /( N* sigxsq - sigx*sigx );
+            b[i][j]=(sigy - a[i][j]*sigx )/ N;
 
-            int e = 0;
-            for(int k=i;k<j;k++)
+            double e = 0;
+            for(int k=i;k<=j;k++)
             {
-                e  += (v[k].y  -  a*v[k].x - b)*(v[k].y  -  a*v[k].x - b);
+                e  += (v[k].y  -  a[i][j]*v[k].x - b[i][j])*(v[k].y  -  a[i][j]*v[k].x - b[i][j]);
             }
-            error[i][j-1] =  e;
+            error[i][j] =  e;
         }
     }
-    vector<int> opt(n+1, 1e9);
-    opt[0]=0;
-    for(int i=1;i<=n;i++)
+    vector<double> opt(n+1);
+    vector<int> index(n+1);
+    for(int j=1;j<=n;j++)
     {
-        //int prev= opt[i];
-        for(int j=1;j<=i;j++)
+        opt[j] = error[1][j] + C;
+        index[j] = 1;
+        for(int i=2;i<=j;i++)
         {
-            opt[i]= min(opt[i],  error[j][i] + C + opt[j-1]);
-            // if(opt[i]!=prev)
-            //     opt[]
+            if (opt[i-1] + error[i][j] + C < opt[j])
+            {
+                opt[j] = opt[i-1] + error[i][j] + C;
+                index[j] = i;
+            }
         }
+    }
+
+    cout<<"Answer : "<<opt[n]<<"\n";
+
+
+    ofstream lfile("lines.txt");
+    for(int i=n;i>1;)
+    {
+        int a1 = v[i].x;
+        int a2= v[index[i]].x;
+        int b1 =  a[index[i]][i] * a1  + b[index[i]][i];
+        int b2= a[index[i]][i] * a2  + b[index[i]][i];
+        i=index[i]-1;
+        lfile << a1 << " " << b1<<" "<<a2<<" "<<b2 ;
+        lfile << "\n";
     }
 
             
