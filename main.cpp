@@ -12,6 +12,7 @@ bool pointComp(Point a, Point b){
 
 int main()
 {
+    //take input
     ofstream mfile("input.txt");
     int C,n;
     cin>>C>>n;
@@ -23,12 +24,17 @@ int main()
         mfile << "\n";
     }
     mfile.close();
+    //start the timer
     auto start = std::chrono::system_clock::now();
+    //sort the points
     sort(v.begin(),v.end(),pointComp);
 
     // initialise error, a, b
     vector<vector<long double>> error( n+1 , vector<long double> (n+1,0)),a( n+1 , vector<long double> (n+1,0)),b( n+1 , vector<long double> (n+1,0));
 
+    //find SSE for all intervals of points.
+    //error[i][j] denotes the error of the points from i to j with a best fit of the points from i to j
+    //a[i][j] and b[i][j] stores the values of a and b from the line y=ax+b of the best fit line found above
     for(int i=1;i<=n;i++)
     {
         for(int j=i+1;j<=n;j++)
@@ -54,6 +60,9 @@ int main()
             error[i][j] =  e;
         }
     }
+    //dynamic programming to find a sequence of best fit segments
+    //index keeps track of the best division index 
+    // index[j] denotes that there is one segment from index[j]+1 to j and a new segment brings ffrom index[j]
     vector<long double> opt(n+1);
     vector<int> index(n+1);
     for(int j=1;j<=n;j++)
@@ -82,6 +91,7 @@ int main()
 
     ofstream lfile("lines.txt");   
     int segments=0; 
+    //find the value of points on the line to plot the lines
     for(int i=n;i>1;)
     {
         int a1 = v[i].x;

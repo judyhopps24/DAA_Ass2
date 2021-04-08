@@ -1,10 +1,16 @@
 #include <bits/stdc++.h>     
 using namespace std;
-
+/*
+to generate random number within 500
+*/
 double randomize() 
 {   
     return (rand() % 500); 
 }
+/*
+This function askes the user to input parameters to generate a custom test case . 
+the user inputs the number of points , the numder of segments . the break points of segements and the m and c values of all segments
+*/
 void manual(vector<double> &vecx, vector<double> &vecy, int n, int s)
 {
     generate(vecx.begin(), vecx.end(), randomize);
@@ -35,6 +41,9 @@ void manual(vector<double> &vecx, vector<double> &vecy, int n, int s)
         }
     }
 }
+/*
+This function geenrates evenly spaced points 
+*/
 void even(vector<double> &vecx, vector<double> &vecy, int n, int s)
 {
     for(int i=0;i<n;i++)

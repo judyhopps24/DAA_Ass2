@@ -2,18 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
- 
-# file = open("input.txt")
-# data = np.loadtxt(file, delimiter=" ")
+#plot time graph
 plt.title('Time analysis')
- 
-# x, y = data.T
-# plt.scatter(x,y)
-
-# x = np.linspace(-5,5,100)
-# y = 2*x+1
-# plt.plot(x, y, '-r', label='y=2x+1')
-
 
 x_values = [6, 9,15, 50, 100, 200]
 y_values = [0,1,1.1011,9.027,42.199,120.119]
@@ -25,14 +15,13 @@ plt.scatter(x_values, y_values)
 
 plt.xlabel('number of points', color='#1C2833')
 plt.ylabel('time  (milli seconds)', color='#1C2833')
-#plt.legend(loc='upper right')
 
 plt.grid()
 plt.show()
  
 
 
-
+#plot space graph
 plt.title('Space analysis')
  
 x_values = [6, 9,15, 50, 100,200]
@@ -48,6 +37,7 @@ plt.ylabel('Space  (kilo bytes)', color='#1C2833')
 plt.grid()
 plt.show()
 
+#plot cost graph
 plt.title('Cost analysis')
  
 x_values = [10, 100, 100000,8000000 ,10000000, 100000000]
