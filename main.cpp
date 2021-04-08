@@ -1,37 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+using namespace std::chrono;
+//struct point has members x and y denote x and y co=ordinates respectively
 struct Point{
-    int x,y;
+    long double x,y;
 };
+bool pointComp(Point a, Point b){
+    //Comparator to determine smaller of the two pointd in terms of x and y co-ordinate
+    return (a.x < b.x) || (a.x == b.x && a.y < b.y) ;
+}
+
 int main()
 {
     ofstream mfile("input.txt");
-    //cout<<"enter the value of c\n";
-    int C;
-    //cout<<"enter the number of points\n";
-    cin>>C;
-    int n;
-    cin>>n;
-    //cout<<"enter points x1 y1\n";
+    int C,n;
+    cin>>C>>n;
     vector<Point> v(n+1);
     for(int i=1;i<=n;i++)
     {
-        int x,y;
-        cin>>x>>y;
-        mfile << x << " " << y ;
+        cin>>v[i].x>>v[i].y;
+        mfile << v[i].x << " " << v[i].y ;
         mfile << "\n";
-        v[i]={x,y};
     }
     mfile.close();
-    vector<vector<double>> error( n+1 , vector<double> (n+1,0));
-    vector<vector<double>> a( n+1 , vector<double> (n+1,0));
-    vector<vector<double>> b( n+1 , vector<double> (n+1,0));
+    auto start = std::chrono::system_clock::now();
+    sort(v.begin(),v.end(),pointComp);
+
+    // initialise error, a, b
+    vector<vector<long double>> error( n+1 , vector<long double> (n+1,0)),a( n+1 , vector<long double> (n+1,0)),b( n+1 , vector<long double> (n+1,0));
+
     for(int i=1;i<=n;i++)
     {
         for(int j=i+1;j<=n;j++)
         {
-            double sigxy=0, sigx=0,sigy=0,sigxsq=0;
+            long double sigxy=0, sigx=0,sigy=0,sigxsq=0;
             for(int k=i;k<=j;k++)
             {
                 sigxy += v[k].x * v[k].y;
@@ -44,7 +46,7 @@ int main()
             a[i][j]=(N*sigxy - sigx * sigy) /( N* sigxsq - sigx*sigx );
             b[i][j]=(sigy - a[i][j]*sigx )/ N;
 
-            double e = 0;
+            long double e = 0;
             for(int k=i;k<=j;k++)
             {
                 e  += (v[k].y  -  a[i][j]*v[k].x - b[i][j])*(v[k].y  -  a[i][j]*v[k].x - b[i][j]);
@@ -52,7 +54,7 @@ int main()
             error[i][j] =  e;
         }
     }
-    vector<double> opt(n+1);
+    vector<long double> opt(n+1);
     vector<int> index(n+1);
     for(int j=1;j<=n;j++)
     {
@@ -67,11 +69,17 @@ int main()
             }
         }
     }
+    
+    cout<<"C :"<<C<<"\n";
+    cout<<"Error : "<<opt[n]<<"\n";
 
-    cout<<"Answer : "<<opt[n]<<"\n";
+    ofstream paramsfile("param.txt");
+    paramsfile << C << " " << opt[n];
+    paramsfile<< "\n";
+    paramsfile.close();
 
-
-    ofstream lfile("lines.txt");
+    ofstream lfile("lines.txt");   
+    int segments=0; 
     for(int i=n;i>1;)
     {
         int a1 = v[i].x;
@@ -80,8 +88,16 @@ int main()
         int b2= a[index[i]][i] * a2  + b[index[i]][i];
         i=index[i]-1;
         lfile << a1 << " " << b1<<" "<<a2<<" "<<b2 ;
+        segments+=1;
         lfile << "\n";
     }
+    lfile.close();
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end - start;
 
+    cout<<"Segments : "<<segments<<"\n";
+    cout<<"Error for a beast fit single line is :"<<error[1][n]<<"\n";
+    cout<<"Time taken : "<<elapsed_seconds.count()*1000<<" milli seconds\n";  
+    cout<<"Memory usage : "<<((n+1)*(n+1)*3*16  + (n+1)*4 + (n+1)*16 + (n+1)*16*2)/1024.0<<"  kilo bytes\n";    
             
 }
