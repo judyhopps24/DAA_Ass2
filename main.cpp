@@ -69,6 +69,8 @@ int main()
             }
         }
     }
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end - start;
     
     cout<<"C :"<<C<<"\n";
     cout<<"Error : "<<opt[n]<<"\n";
@@ -92,8 +94,7 @@ int main()
         lfile << "\n";
     }
     lfile.close();
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end - start;
+    
 
     cout<<"Segments : "<<segments<<"\n";
     cout<<"Error for a beast fit single line is :"<<error[1][n]<<"\n";

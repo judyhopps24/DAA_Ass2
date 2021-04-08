@@ -23,6 +23,7 @@
       <a class="nav-item nav-link" href="TC3.html">Case 3</a>
       <a class="nav-item nav-link" href="TC4.html">Case 4</a>
       <a class="nav-item nav-link" href="TC5.html">Case 5</a>
+      <a class="nav-item nav-link" href="TC6.html">Case 6</a>
     </div>
   </div>
 </nav>
@@ -30,50 +31,47 @@
 <div class="outer">    
     <br>
     <h2 style="text-align: center">Algorithm</h2>
-    <p>The research paper provided as an Assignment in the course CS F364 Design and Analysis of Algorithm, offers us with an excellent opportunity to understand how divide and conquer algorithms work. 
-The paper poses 2 problems based on Iso-Rectangles (rectangles having sides parallel to the coordinate axes).
-<ul>
-<li>The Measure problem aims to find the total area covered by all the rectangles in our data set, while </li>
-<li>The Contour problem deals with finding the boundary of our data set. </li>
-</ul> 
+   
 
-
-The algorithm starts by explaining why these problems can be solved easily using a data structure called Stripes. 
-The plane is divided into small horizontal rectangles called stripes. These stripes are defined as a tripe consisting of the x-interval ,  y-interval of the stripe and a x_union which holds 
-a set of intervals, which is used to represent the part of the union of the rectangles in R that falls into the stripe's area. 
-The lines that correspond to the top and bottom that define a stripes y_interval align exactly with the horizontal lines that make up the rectangles. 
-<br></p>
-<h3>Measure and Contour</h3>
+<h3>Time Complexity</h3>
 <p>
+During precrossesing, the points are first sorted. T(n)=O(nlogn) (2). <br><br> Then for every possible interval of points a single best fit line is found.
+T(n)=O(n cube) (2) .<br><br> Let OPT(j) denote the minimum cost for points p1, p2, …, pj. Let e(i, j) denote the minimum squared error for points pi, pi+1, …, pj. The crucial observation is that the last point pj for some subproblem OPT(j) belongs to a single segment in the optimal partition, and that segment begins at some earlier point pi. Thus, if we knew OPT(i-1), we could compute OPT(j). This leads to the following recursive formulation:
 
-Assuming we have the region divided into stripes the measure problem simply becomes the sum of all the x_unions * y_intervals through all the stripes.
-Similarly assuming stripes, the contour problem reduces to find if a particular horizontal edge of a rectangle contributes to the contour or not, and if it does, which intervals of it actually contribute to the contour. To implement this easily a binary tree is built such that the leaf nodes contain the endpoints of 
-the intervals in s.x_union . A leaf also contains an indication 
-whether the represented point is a left or a right endpoint.
-</p>
-<br>
-<h3>Stripes</h3>
-<p>
-Stripes is computed using a divide and conquer strategy. We divide the input (Set of verticle edges ) until there is only one edge in the set . 
-In case the input has only one verticle edge 3 stripes are created with the middle stripe having non-empty x_union.<br><br>
-Obviously all operations in Case 1 take only constant time, hence 
-T(1)=O(1) (1) .<br><br>Dividing can be done in constant time and the conquer step yields 
-two terms T(n/2). <br><br>
+OPT(j) = min1 ≤ i ≤ j(e(i,j) + C + OPT[i-1]) . T(n)= O(n sq) (3)<br><br>
 
-In the merge step we call three sub routines namely, copy, blacken, concat. 
-Copy funtion takes creates consolidated stripes of both left and right Stripes.<br><br>
-Blacken function blackens an entire stripe incase the partner of the edge isnt present in the opposite side of stripes.<br><br>
-Concat function contacts the stripes of left and right that are already aligned(done in copy function).<br><br>
-All the above functions are of time complexity O(no . of stripes + no of edges ) which is O(n). <br><br>
-T(n) = O(1) + 2 T(n/2) + O(n) (2) 
-It is well known that the recurrence Eqs. (1) and (2) have solution 
-T(n) = O(n log n) <br><br>
+
+T(n) = O(n cube) <br><br>
 
 Since the algorithm employs a divide and conquer approach to the problem, we observe that the worst-case time complexity is O(nlogn) , n being the number of rectangles. Test cases and their results with timing analysis has been shown below.
 </p>
-    <br>
+<br><br>
+<h3>Space Complexity</h3>
+<p>
+2D arrays containing are required to store the optimum best fit line between all possible interval of points making the space complexity O(n sq).
 
-  <img class = "circleimg" src= "time-plot.PNG" />
+</p>
+    <br><br>
+
+<h3>Cost (C)</h3>
+<p>
+The least error would be given if all the points line on a segment. This would increase the number of segments . Thus a penality C is introduced which is then added to the total error as <br><br>
+Total error = SSE + number of segments *C
+<br><br>
+Thus, increasing the value of C reduces the number of segments used to fit in the points. 
+
+</p>
+    <br><br>
+
+<div class="circleimgcontainer">
+      <img class = "circleimg" src= "time-plot.PNG" />
+      <img class = "circleimg" src= "space-plot.PNG" />
+</div>
+
+
+<img class = "circleimg" src= "cost-plot.PNG" />
+  
+  
 
     
    
