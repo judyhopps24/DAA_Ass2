@@ -14,7 +14,7 @@ int main()
 {
     //take input
     ofstream mfile("input.txt");
-    int C,n;
+    int C;int n;
     cin>>C>>n;
     vector<Point> v(n+1);
     for(int i=1;i<=n;i++)
@@ -94,10 +94,10 @@ int main()
     //find the value of points on the line to plot the lines
     for(int i=n;i>1;)
     {
-        int a1 = v[i].x;
-        int a2= v[index[i]].x;
-        int b1 =  a[index[i]][i] * a1  + b[index[i]][i];
-        int b2= a[index[i]][i] * a2  + b[index[i]][i];
+        double a1 = v[i].x;
+        double a2= v[index[i]].x;
+        double b1 =  a[index[i]][i] * a1  + b[index[i]][i];
+        double b2= a[index[i]][i] * a2  + b[index[i]][i];
         i=index[i]-1;
         lfile << a1 << " " << b1<<" "<<a2<<" "<<b2 ;
         segments+=1;
