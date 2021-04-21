@@ -14,7 +14,7 @@ int main()
 {
     //take input
     ofstream mfile("input.txt");
-    int C;int n;
+    double C;int n;
     cin>>C>>n;
     vector<Point> v(n+1);
     for(int i=1;i<=n;i++)
